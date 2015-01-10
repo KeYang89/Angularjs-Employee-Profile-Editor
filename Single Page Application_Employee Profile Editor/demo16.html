@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <!--[if lt IE 9]>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <![endif]-->
+    <script src="js/angular.min.js"></script>
+    <script src="js/ng-table.js"></script>
+    <link rel="stylesheet" href="css/ng-table.min.css">
+</head>
+<body ng-app="main">
+<h1>Employee Profile</h1>
+
+<div ng-controller="DemoCtrl">
+  <table ng-table="tableParams" class="table">
+    <tbody ng-repeat="group in $groups">
+        <tr class="ng-table-group">
+            <td colspan="{{$columns.length}}">
+                <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                    <strong>{{ group.value }}</strong>
+                </a>
+            </td>
+        </tr>
+        <tr ng-hide="group.$hideRows" ng-repeat="user in group.data">
+            <td data-title="'Name'" width="100">
+                <span ng-if="!user.$edit">{{user.name}}</span>
+                <div ng-if="user.$edit"><input class="form-control" type="text" ng-model="user.name" /></div>
+            </td>
+            <td data-title="'Gender'" width="50">
+                <span ng-if="!user.$edit">{{user.gender}}</span>
+                <div ng-if="user.$edit"><input class="form-control" type="text" ng-model="user.gender" /></div>
+            </td>
+            <td data-title="'Age'" width="100">
+                <span ng-if="!user.$edit">{{user.age}}</span>
+                <div ng-if="user.$edit"><input class="form-control" type="number" ng-model="user.age" /></div>
+            </td>
+             <td data-title="'Email'" width="200">
+                <span ng-if="!user.$edit">{{user.email}}</span>
+                <div ng-if="user.$edit"><input class="form-control" type="text" ng-model="user.email" /></div>
+            </td>
+             <td data-title="'Phone Number'" width="200">
+                <span ng-if="!user.$edit">{{user.number}}</span>
+                <div ng-if="user.$edit"><input class="form-control" type="number" ng-model="user.number" /></div>
+            </td>   
+            <td data-title="'Salary'" sortable="'salary'" width="100">
+            	
+            	<div ng-if="user.$edit"><input class="form-control" type="number" ng-model="user.salary" /></div>
+                <span ng-class="{ 'plus': user.salary >= 0,'minus': user.salary < 0 }">{{user.salary}}</span>
+            </td>
+            <td data-title="'Actions'" width="100">
+                <a ng-if="!user.$edit" href="" class="btn btn-default btn-xs" ng-click="user.$edit = true">Edit</a>
+                <a ng-if="user.$edit" href="" class="btn btn-primary btn-xs" ng-click="user.$edit = false">Save</a>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+
+
+    <script>
+        var app = angular.module('main', ['ngTable']).
+                controller('DemoCtrl', function($scope,  $filter, ngTableParams, $sce) {
+                    var data = [{name: "Bobby", gender:"F", age: 27,email:"bobby@headspring.com", number:323231102,salary: 210,role: 'Administrator'},
+                        {name: "Enos", gender:"M", age: 34,email:"enos@headspring.com", number:320455239,salary: 150, role: 'Moderator'},
+                        {name: "Tom", gender:"M", age: 43,email:"tom@headspring.com", number:323277662,salary: 110, role: 'User'},
+                        {name: "Jane", gender:"F", age: 27,email:"jane@headspring.com", number:323230002,salary: 120, role: 'User'},
+                        {name: "Nana", gender:"F", age: 29,email:"nana@headspring.com", number:323756786,salary: 120, role: 'User'},
+                        {name: "Enos", gender:"M", age: 34,email:"enos@headspring.com", number:320455239,salary: 180, role: 'User'},
+                        {name: "Tom", gender:"M", age: 43,email:"tom@headspring.com", number:323277662,salary: 100, role: 'User'},
+                        {name: "Yone", gender:"F", age: 27,email:"yone@headspring.com", number:329230002,salary: 190, role: 'Moderator'},
+                        {name: "Luna", gender:"F", age: 29,email:"luna@headspring.com", number:323756786,salary: -60, role: 'User'},
+                        {name: "Unos", gender:"M", age: 36,email:"unos@headspring.com", number:320755239,salary: 150, role: 'Moderator'},
+                        {name: "Tim", gender:"M", age: 43,email:"tim@headspring.com", number:323277662,salary: 210, role: 'User'},
+                        {name: "Jane", gender:"F", age: 27,email:"jane@headspring.com", number:323230002,salary: 190, role: 'User'},
+                        {name: "Nara", gender:"F", age: 39,email:"nara@headspring.com", number:323156786,salary: 120, role: 'Moderator'},
+                        {name: "Jessica", gender:"F", age: 27,email:"jessicaheadspring.com", number:323230802,salary: 160, role: 'Moderator'},
+                        {name: "Nancy", gender:"F", age: 29,email:"nancy@headspring.com", number:323756086,salary: 110, role: 'User'},
+                        {name: "Enos", gender:"M", age: 34,email:"enos@headspring.com", number:320455239,salary: -10, role: 'User'},
+                        {name: "Theom", gender:"M", age: 43,email:"theom@headspring.com", number:323077662,salary: 150, role: 'User'},
+                        {name: "Jine", gender:"F", age: 22,email:"jine@headspring.com", number:323230002,salary: -10, role: 'User'},
+                        {name: "Nana", gender:"F", age: 29,email:"nana@headspring.com", number:323756786,salary: 110, role: 'User'},
+                        {name: "Kam", gender:"M", age: 43,email:"kam@headspring.com", number:325523921,salary: 150, role: 'Moderator'},
+                        {name: "John", gender:"M", age: 27,email:"john@headspring.com", number:326977762,salary: 110, role: 'User'},
+                        {name: "Nephi", gender:"M", age: 29,email:"nephi@headspring.com", number:320788832,salary: 140, role: 'User'},
+                        {name: "Enos", gender:"M", age: 34,email:"enos@headspring.com", number:320455239,salary: -50, role: 'User'},
+                        {name: "Tommy", gender:"M", age: 43,email:"tommy@headspring.com", number:323277662,salary: 170, role: 'Moderator'},
+                        {name: "Jone", gender:"F", age: 21,email:"jone@headspring.com", number:323130902,salary: 280,role: 'Administrator'},
+                        {name: "Naomi", gender:"F", age: 29,email:"naomi@headspring.com", number:323716786,salary: 190, role: 'Moderator'},
+                        {name: "Emma",gender:"F", age: 34,email:"emma@headspring.com", number:323299966,salary: 140, role: 'Moderator'}];
+                      
+                                $scope.tableParams = new ngTableParams({
+                                            page: 1,            // show first page
+                                            count: 10           // count per page
+                                        }, {
+                                            groupBy: 'role',
+                    total: data.length,
+                    getData: function($defer, params) {
+                        var orderedData = params.sorting() ?
+                    $filter('orderBy')(data, $scope.tableParams.orderBy()) :
+                    data;
+
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+
+                                            }
+                                        });
+                                    });
+    </script>
+   <style>
+   td {text-align: center;}
+    .ng-table .plus, .ng-table .minus {
+        font-weight: bold;
+        padding-left: 18px;
+        position: relative;
+    }
+    .ng-table .plus:before, .ng-table .minus:before {
+        content:"";
+        border-width: 4px;
+        border-style:solid;
+        left: 8px;
+        top: 50%;
+        position: absolute;
+        margin-top: -2px;
+    }
+    .ng-table .plus {
+        color: green;
+    }
+    .ng-table .plus:before {
+        border-color: green;
+        border-top:none;
+        border-left:4px solid transparent;
+        border-right:4px solid transparent;
+    }
+    .ng-table .minus {
+        color: red;
+    }
+    .ng-table .minus:before {
+        border-color: red;
+        border-bottom:none;
+        border-left:4px solid transparent;
+        border-right:4px solid transparent;
+    }
+    </style>
+</div>
+
+
+</body>
+</html>
